@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { baseApiUrl } from "../constants.js";
 import { Container } from "react-bootstrap";
-import Alert from "react-bootstrap/Alert";
+import { useNavigate } from "react-router-dom";
 
 const PostForm = () => {
+  const navigate = useNavigate();
   const [newTitle, setNewTitle] = useState("");
   const [newContent, setNewContent] = useState("");
 
@@ -21,18 +22,19 @@ const PostForm = () => {
       }),
     })
       .then((res) => {
-        console.log("Here's the response", res);
+        console.log("Risposta Esatta!", res);
         if (res.ok) {
-          window.alert("New post added!");
+          window.alert("Nuovo post aggiunto alla lista!");
           setNewTitle("");
           setNewContent("");
         } else {
-          throw new Error("Network response was not ok");
+          throw new Error("Errore");
         }
+        navigate("/");
       })
 
       .catch((error) => {
-        console.error("Failed to add the new post:", error);
+        console.error("Errore:", error);
       });
   };
 
@@ -44,7 +46,6 @@ const PostForm = () => {
         <input type="text" required value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
         <label className="my-3">Contenuto:</label>
         <textarea required value={newContent} onChange={(e) => setNewContent(e.target.value)}></textarea>
-        <label>Titolo:</label>
 
         <div>
           <button className="btn btn-success my-5">Pubblica</button>

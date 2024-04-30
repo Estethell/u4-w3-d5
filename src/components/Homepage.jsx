@@ -4,7 +4,11 @@ import { Link } from "react-router-dom/dist";
 import { Card, Button } from "react-bootstrap";
 import { Container, Row, Col } from "react-bootstrap";
 
-const Homepage = () => {
+const Homepage = (props) => {
+  const set = (post) => {
+    debugger;
+    props.setArticle(post);
+  };
   const [posts, setPosts] = useState([]);
   const [deletes, setDeletes] = useState(0);
   const [lastPage, setLastPage] = useState(null);
@@ -13,7 +17,6 @@ const Homepage = () => {
   useEffect(() => {
     fetch(`${baseApiUrl}/posts?page=${currentPage}&_embed=1`)
       .then((res) => {
-        // recupera i dati della paginazione dagli header
         setLastPage(parseInt(res.headers.get("X-WP-TotalPages")));
         return res.json();
       })
@@ -48,7 +51,7 @@ const Homepage = () => {
     }).then((res) => {
       if (res.ok) {
         setDeletes(deletes + 1);
-        window.alert("Post successfully deleted!");
+        window.alert("Post eliminato con successo");
       }
     });
   };
@@ -70,17 +73,26 @@ const Homepage = () => {
                         : "https://images.pexels.com/photos/321552/pexels-photo-321552.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                     }
                   />
-                  <Card.Body className="d-flex flex-column">
-                    <Card.Title>
-                      <Link className="linkHomepage" to={`/posts/${post.id}`}>
-                        {post.title.rendered}
-                      </Link>
-                    </Card.Title>
-                    <Card.Text dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}></Card.Text>
+                  <Card.Body className="d-flex flex-column justify-content-between">
+                    <div>
+                      <Card.Title>
+                        <Link className="linkHomepage" to={`/posts/${post.id}`}>
+                          {post.title.rendered}
+                        </Link>
+                      </Card.Title>
+                      <Card.Text dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}></Card.Text>
+                    </div>
 
-                    <Button className="btn btn-danger mt-auto" onClick={() => deletePost(post.id)}>
-                      Cancella
-                    </Button>
+                    <div>
+                      <Button className="btn btn-danger m-2" onClick={() => deletePost(post.id)}>
+                        Cancella
+                      </Button>
+                      <Link to="/PutForm">
+                        <Button className="btn btn-success m-2" onClick={() => set(post)}>
+                          Modifica
+                        </Button>
+                      </Link>
+                    </div>
                   </Card.Body>
                 </Card>
               </Col>

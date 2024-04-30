@@ -5,15 +5,19 @@ import PostDetails from "./components/PostDetails";
 import "bootstrap/dist/css/bootstrap.min.css";
 import PostForm from "./components/PostForm";
 import "./App.css";
+import PutForm from "./components/PutForm";
+import { useState } from "react";
 
 function App() {
+  const [acticleData, setArticleData] = useState(null);
   return (
     <BrowserRouter>
       <MyNav />
       <Routes>
-        <Route path="/" element={<Homepage />} />
+        <Route path="/" element={<Homepage setArticle={setArticleData} />} />
         <Route path="/posts/:id" element={<PostDetails />} />
         <Route path="/form" element={<PostForm />} />
+        <Route path="/PutForm" element={<PutForm articleData={acticleData} />} />
       </Routes>
     </BrowserRouter>
   );
